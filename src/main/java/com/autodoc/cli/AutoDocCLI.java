@@ -1,6 +1,6 @@
 package com.autodoc.cli;
 
-import com.autodoc.core.ASTParserService;
+import com.autodoc.core.CodeAnalyzerService;
 import com.autodoc.core.DocWriter;
 import com.autodoc.core.GitService;
 import com.autodoc.core.LLMClient;
@@ -39,23 +39,27 @@ public class AutoDocCLI implements Callable<Integer> {
         
         System.out.println("🔍 Archivos modificados detectados: " + modifiedFiles.size());
         
-        ASTParserService parser = new ASTParserService();
-        StringBuilder prunedAstBuilder = new StringBuilder();
+        CodeAnalyzerService analyzer = new CodeAnalyzerService();
+        StringBuilder prunedCodeBuilder = new StringBuilder();
         
         for (String filePath : modifiedFiles) {
-            File javaFile = new File(workspace, filePath);
-            if (javaFile.exists()) {
+            File codeFile = new File(workspace, filePath);
+            if (codeFile.exists()) {
                 System.out.println("✂️ Podando lógica de: " + filePath);
-                prunedAstBuilder.append("=========== ").append(filePath).append(" ===========\n");
-                prunedAstBuilder.append(parser.parseAndPrune(javaFile)).append("\n");
+                prunedCodeBuilder.append("=========== ").append(filePath).append(" ===========\n");
+                prunedCodeBuilder.append(analyzer.parseAndPrune(codeFile)).append("\n");
             }
         }
         
-        System.out.println("🧠 Enviando AST puro al LLM (Local=" + isLocal + ")...");
+        System.out.println("🧠 Enviando Código Universal Podado al LLM (Local=" + isLocal + ")...");
+        System.out.println("\n--- [INICIO CÓDIGO PODADO] ---");
+        System.out.println(prunedCodeBuilder.toString());
+        System.out.println("--- [FIN CÓDIGO PODADO] ---\n");
+
         LLMClient llmClient = new LLMClient(isLocal);
         
         try {
-            String documentation = llmClient.generateDocumentation(prunedAstBuilder.toString());
+            String documentation = llmClient.generateDocumentation(prunedCodeBuilder.toString());
             
             DocWriter writer = new DocWriter();
             writer.writeDoc(workspace, documentation, "Architecture_Update_" + System.currentTimeMillis() + ".md");

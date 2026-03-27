@@ -1,7 +1,12 @@
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\cli\AutoDocCLI.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\ASTParserService.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\CodeAnalyzerService.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\DocWriter.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\GitService.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\JavaPruner.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\JavaScriptPruner.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\LanguagePruner.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\PythonPruner.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\LLMClient.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\visitors\MethodBodyPruner.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\test\PaymentProcessor.java

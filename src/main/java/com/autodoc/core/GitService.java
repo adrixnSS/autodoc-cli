@@ -10,9 +10,10 @@ public class GitService {
     public List<String> getModifiedJavaFiles(String workspace, String diffTarget) {
         List<String> modifiedFiles = new ArrayList<>();
         try {
-            // git diff --name-only <branch> -- "*.java"
+            // Buscamos cambios en archivos de código comunes
             ProcessBuilder pb = new ProcessBuilder(
-                    "git", "diff", "--name-only", diffTarget, "--", "*.java"
+                    "git", "diff", "--name-only", diffTarget, "--", 
+                    "*.java", "*.js", "*.ts", "*.py", "*.go", "*.rb", "*.php"
             );
             pb.directory(new java.io.File(workspace));
             Process process = pb.start();
@@ -20,9 +21,7 @@ public class GitService {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
-                if(line.trim().endsWith(".java")) {
-                    modifiedFiles.add(line.trim());
-                }
+                modifiedFiles.add(line.trim());
             }
             process.waitFor();
             
