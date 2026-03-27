@@ -31,12 +31,20 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>com.autodoc.cli.AutoDocCLI</mainClass>
+                  <mainClass>com.autodoc.gui.Launcher</mainClass>
                 </transformer>
               </transformers>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>com.autodoc.gui.Launcher</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -10,4 +10,7 @@ C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\La
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\PythonPruner.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\LLMClient.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\visitors\MethodBodyPruner.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\gui\AutoDocGUI.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\gui\Launcher.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\gui\MainController.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\test\PaymentProcessor.java

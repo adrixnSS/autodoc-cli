@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class CodeAnalyzerService {
 
+    private static final java.util.Set<String> EXCLUDED_DIRS = new java.util.HashSet<>(java.util.Arrays.asList(
+        "target", "node_modules", "docs", ".git", ".github", ".idea", ".vscode",
+        "build", "dist", "out", "bin",
+        "apache-maven-3.9.9", "apache-maven-3.9.8", "apache-maven-3.8.8"
+    ));
+
     private final Map<String, LanguagePruner> pruners;
     private final DependencyMapper dependencyMapper;
 
@@ -28,7 +34,8 @@ public class CodeAnalyzerService {
 
         for (File file : files) {
             if (file.isDirectory()) {
-                if (!file.getName().startsWith(".") && !file.getName().equals("target") && !file.getName().equals("node_modules")) {
+                String name = file.getName();
+                if (!name.startsWith(".") && !EXCLUDED_DIRS.contains(name)) {
                     scanWorkspace(file);
                 }
             } else {

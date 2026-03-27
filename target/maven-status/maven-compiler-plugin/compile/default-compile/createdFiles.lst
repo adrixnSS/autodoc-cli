@@ -1,7 +1,9 @@
 com\autodoc\core\CodeAnalyzerService.class
+com\autodoc\gui\Launcher.class
 META-INF\native-image\picocli-generated\resource-config.json
 com\autodoc\core\DocWriter.class
 com\autodoc\core\languages\JavaScriptPruner.class
+com\autodoc\gui\MainController.class
 com\autodoc\test\PaymentProcessor.class
 com\autodoc\core\LLMClient.class
 com\autodoc\core\GitService.class
@@ -11,6 +13,7 @@ com\autodoc\core\visitors\MethodBodyPruner.class
 META-INF\native-image\picocli-generated\proxy-config.json
 META-INF\native-image\picocli-generated\reflect-config.json
 com\autodoc\core\languages\JavaPruner.class
+com\autodoc\gui\AutoDocGUI.class
 com\autodoc\cli\AutoDocCLI.class
 com\autodoc\core\ASTParserService.class
 com\autodoc\core\languages\LanguagePruner.class

@@ -1,0 +1,87 @@
+/* AutoDoc v3.0 Elite Design System */
+
+.root {
+    -primary-color: #1f6feb;
+    -bg-dark: #0d1117;
+    -bg-sidebar: #161b22;
+    -text-main: #c9d1d9;
+    -text-muted: #8b949e;
+    -accent-success: #238636;
+    -border-color: #30363d;
+}
+
+.main-content {
+    -fx-background-color: -bg-dark;
+}
+
+.sidebar {
+    -fx-background-color: -bg-sidebar;
+    -fx-border-color: transparent -border-color transparent transparent;
+}
+
+.logo-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary-color;
+    -fx-padding: 0 0 20 0;
+}
+
+.header-text {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.subheader-text {
+    -fx-text-fill: -text-muted;
+    -fx-padding: 0 0 10 0;
+}
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-main;
+    -fx-alignment: center-left;
+    -fx-padding: 12 15;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-primary {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 6;
+}
+
+.btn-success {
+    -fx-background-color: -accent-success;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 6;
+}
+
+.input-field {
+    -fx-background-color: #0d1117;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 8;
+}
+
+.editor-area {
+    -fx-control-inner-background: #090c10;
+    -fx-font-family: 'Consolas', 'Courier New';
+    -fx-text-fill: #58a6ff;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 4;
+}
+
+.version-text {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 10px;
+}

@@ -25,8 +25,8 @@ public class LLMClient {
         this.isOllama = isOllama;
         this.modelName = modelName;
         this.httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .connectTimeout(Duration.ofSeconds(10))
+                .version(HttpClient.Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(5))
                 .build();
         this.mapper = new ObjectMapper();
 
@@ -89,7 +89,7 @@ public class LLMClient {
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl))
-                .timeout(Duration.ofMinutes(1))
+                .timeout(Duration.ofSeconds(30))
                 .header("Content-Type", "application/json");
 
         if (!baseUrl.contains("127.0.0.1")) {

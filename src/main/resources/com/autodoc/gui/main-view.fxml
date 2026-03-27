@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<HBox prefHeight="700.0" prefWidth="1000.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.autodoc.gui.MainController">
+   <children>
+      <!-- Sidebar / Glassmorphism Panel -->
+      <VBox prefWidth="250.0" styleClass="sidebar">
+         <children>
+            <Label styleClass="logo-text" text="AutoDoc CLI" />
+            <Separator prefWidth="200.0" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="menu-button" text="Dashboard" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="menu-button" text="Historial" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="menu-button" text="Ajustes" />
+            <Region VBox.vgrow="ALWAYS" />
+            <Label styleClass="version-text" text="v3.0.0 Universal" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+      
+      <!-- Main Content -->
+      <VBox HBox.hgrow="ALWAYS" styleClass="main-content">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label styleClass="header-text" text="Arquitecto de Código" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button onAction="#handleAnalyze" styleClass="btn-primary" text="Analizar Ahora" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </HBox>
+            
+            <GridPane hgap="15.0" vgap="15.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <HBox spacing="10.0" GridPane.columnSpan="2">
+                     <children>
+                        <TextField fx:id="workspacePathField" promptText="Ruta del workspace" styleClass="input-field" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleBrowse" styleClass="btn-secondary" text="Examinar..." />
+                     </children>
+                  </HBox>
+                  <ComboBox fx:id="diffModeCombo" maxWidth="1.7976931348623157E308" promptText="Modo de Comparación" styleClass="input-field" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="localModeCheck" selected="true" styleClass="input-field" text="Zero-Cost Mode (Local)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets bottom="20.0" top="20.0" />
+               </VBox.margin>
+            </Separator>
+            
+            <Label styleClass="subheader-text" text="Editor de Reporte" />
+            <TextArea fx:id="outputArea" promptText="La documentación aparecerá aquí para ser editada..." styleClass="editor-area" VBox.vgrow="ALWAYS" />
+            
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <children>
+                  <Button onAction="#handleClear" styleClass="btn-secondary" text="Limpiar" />
+                  <Button onAction="#handleSave" styleClass="btn-success" text="Guardar Documentación" />
+               </children>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </children>
+</HBox>
