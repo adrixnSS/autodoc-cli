@@ -25,6 +25,12 @@ public class AutoDocCLI implements Callable<Integer> {
     @Option(names = {"-l", "--local"}, description = "Enrutar hacia instancia local de OpenClaw para Zero-Cost mode.", defaultValue = "false")
     private boolean isLocal;
 
+    @Option(names = {"-s", "--stdout"}, description = "Imprimir documentación directamente en la consola (útil para CI/CD).", defaultValue = "false")
+    private boolean isStdout;
+
+    @Option(names = {"--pr-comment"}, description = "Formatear salida específicamente para comentarios de Pull Request.", defaultValue = "false")
+    private boolean isPRComment;
+
     @Override
     public Integer call() throws Exception {
         System.out.println("🚀 Iniciando AutoDoc CLI...");
@@ -40,18 +46,26 @@ public class AutoDocCLI implements Callable<Integer> {
         System.out.println("🔍 Archivos modificados detectados: " + modifiedFiles.size());
         
         CodeAnalyzerService analyzer = new CodeAnalyzerService();
+        System.out.println("📂 Escaneando dependencias del proyecto (Inteligencia de Contexto)...");
+        analyzer.scanWorkspace(new File(workspace));
+
         StringBuilder prunedCodeBuilder = new StringBuilder();
+        StringBuilder relatedContextBuilder = new StringBuilder();
         
         for (String filePath : modifiedFiles) {
             File codeFile = new File(workspace, filePath);
             if (codeFile.exists()) {
                 System.out.println("✂️ Podando lógica de: " + filePath);
+                String pruned = analyzer.parseAndPrune(codeFile);
                 prunedCodeBuilder.append("=========== ").append(filePath).append(" ===========\n");
-                prunedCodeBuilder.append(analyzer.parseAndPrune(codeFile)).append("\n");
+                prunedCodeBuilder.append(pruned).append("\n");
+                
+                // Buscar contexto relacionado para este archivo específico
+                relatedContextBuilder.append(analyzer.findContextFor(pruned));
             }
         }
         
-        System.out.println("🧠 Enviando Código Universal Podado al LLM (Local=" + isLocal + ")...");
+        System.out.println("🧠 Enviando Código con Referencia Cruzada al LLM (Local=" + isLocal + ")...");
         System.out.println("\n--- [INICIO CÓDIGO PODADO] ---");
         System.out.println(prunedCodeBuilder.toString());
         System.out.println("--- [FIN CÓDIGO PODADO] ---\n");
@@ -59,10 +73,26 @@ public class AutoDocCLI implements Callable<Integer> {
         LLMClient llmClient = new LLMClient(isLocal);
         
         try {
-            String documentation = llmClient.generateDocumentation(prunedCodeBuilder.toString());
+            // Unimos el código podado con el contexto de las clases relacionadas encontradas
+            String fullPrompt = "CONTRATO Y REFERENCIAS:\n" + relatedContextBuilder.toString() + 
+                               "\nCAMBIOS ACTUALES:\n" + prunedCodeBuilder.toString();
+            String documentation = llmClient.generateDocumentation(fullPrompt);
             
-            DocWriter writer = new DocWriter();
-            writer.writeDoc(workspace, documentation, "Architecture_Update_" + System.currentTimeMillis() + ".md");
+            if (isPRComment) {
+                documentation = "### 🤖 AutoDoc Architect Report\n\n" + 
+                                "He analizado los cambios de este Pull Request y he generado la siguiente documentación técnica:\n\n" + 
+                                documentation + 
+                                "\n\n---\n*Generado automáticamente por AutoDoc CLI v2.0*";
+            }
+
+            if (isStdout) {
+                System.out.println("\n--- [INICIO DOCUMENTACIÓN GENERADA] ---");
+                System.out.println(documentation);
+                System.out.println("--- [FIN DOCUMENTACIÓN GENERADA] ---\n");
+            } else {
+                DocWriter writer = new DocWriter();
+                writer.writeDoc(workspace, documentation, "Architecture_Update_" + System.currentTimeMillis() + ".md");
+            }
             
             System.out.println("🎉 Documentación autogenerada con éxito.");
         } catch(Exception e) {

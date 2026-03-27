@@ -5,6 +5,7 @@ com\autodoc\core\languages\JavaScriptPruner.class
 com\autodoc\test\PaymentProcessor.class
 com\autodoc\core\LLMClient.class
 com\autodoc\core\GitService.class
+com\autodoc\core\languages\DependencyMapper.class
 com\autodoc\core\languages\PythonPruner.class
 com\autodoc\core\visitors\MethodBodyPruner.class
 META-INF\native-image\picocli-generated\proxy-config.json

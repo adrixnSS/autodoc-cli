@@ -10,13 +10,47 @@ import java.util.Map;
 public class CodeAnalyzerService {
 
     private final Map<String, LanguagePruner> pruners;
+    private final DependencyMapper dependencyMapper;
 
     public CodeAnalyzerService() {
         this.pruners = new HashMap<>();
+        this.dependencyMapper = new DependencyMapper();
         this.pruners.put("java", new JavaPruner());
         this.pruners.put("js", new JavaScriptPruner());
         this.pruners.put("ts", new JavaScriptPruner());
         this.pruners.put("py", new PythonPruner());
+    }
+
+    public void scanWorkspace(File dir) {
+        if (!dir.exists() || !dir.isDirectory()) return;
+        File[] files = dir.listFiles();
+        if (files == null) return;
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                if (!file.getName().startsWith(".") && !file.getName().equals("target") && !file.getName().equals("node_modules")) {
+                    scanWorkspace(file);
+                }
+            } else {
+                String extension = getExtension(file.getName());
+                if (pruners.containsKey(extension)) {
+                    String className = file.getName().replace("." + extension, "");
+                    // Registramos la firma (podada) en el mapa de dependencias
+                    dependencyMapper.registerClass(className, parseAndPrune(file));
+                }
+            }
+        }
+    }
+
+    public String findContextFor(String content) {
+        StringBuilder context = new StringBuilder();
+        for (String className : dependencyMapper.getAllSignatures().keySet()) {
+            if (content.contains(className)) {
+                context.append("Dependencia Detectada [").append(className).append("]:\n")
+                       .append(dependencyMapper.getSignature(className)).append("\n");
+            }
+        }
+        return context.toString();
     }
 
     public String parseAndPrune(File file) {

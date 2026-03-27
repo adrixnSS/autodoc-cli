@@ -37,7 +37,20 @@ public class LLMClient {
 
     public String generateDocumentation(String prunedCodeBlocks) throws Exception {
         ObjectNode requestBody = mapper.createObjectNode();
-        String systemPrompt = "Eres un Technical Writer experto y un Arquitecto de Software. Tu tarea es extraer documentación detallada basada EXCLUSIVAMENTE en la estructura AST de Java provista. NO inventes implementaciones (alucinaciones). Documenta firmas, patrones arquitectónicos detectados y sugiere siempre al menos un diagrama conceptual usando formato Mermaid (\n```mermaid ... ```\n).";
+        String systemPrompt = "Eres un Technical Writer experto y un Arquitecto de Software Senior. Tu misión es generar documentación técnica de élite basándote EXCLUSIVAMENTE en la estructura AST y referencias cruzadas proporcionadas.\n\n" +
+                              "### DIRECTRICES DE VISUALIZACIÓN (CRÍTICO):\n" +
+                              "1. Genera SIEMPRE un diagrama de arquitectura usando formato Mermaid.\n" +
+                              "2. Prioriza el estándar C4 Model (C4Context o C4Component) para relaciones entre archivos.\n" +
+                              "3. Usa Diagramas de Secuencia para representar la interacción lógica de los métodos.\n" +
+                              "4. ESTILO PREMIUM: Inyecta directivas de estilo en Mermaid (ej: `accTitle`, `accDescr`) y usa temas de color profesionales (preferiblemente tonos oscuros/azulados).\n" +
+                              "5. Ejemplo de estilo Mermaid sugerido:\n" +
+                              "   ```mermaid\n" +
+                              "   %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#1f6feb', 'edgeColor': '#58a6ff' }}}%%\n" +
+                              "   graph TD; ...\n" +
+                              "   ```\n\n" +
+                              "### REGLAS ANTI-ALUCINACIÓN:\n" +
+                              "- NO inventes implementaciones internas de métodos que han sido podados.\n" +
+                              "- Limítate a lo que ves en las firmas y nombres de dependencias.";
 
         if (isLocal) {
             // Payload OpenClaw (OpenAI compat)

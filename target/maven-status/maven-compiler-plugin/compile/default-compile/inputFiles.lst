@@ -3,6 +3,7 @@ C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\ASTParserSer
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\CodeAnalyzerService.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\DocWriter.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\GitService.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\DependencyMapper.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\JavaPruner.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\JavaScriptPruner.java
 C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\languages\LanguagePruner.java

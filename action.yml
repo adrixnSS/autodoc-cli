@@ -1,0 +1,46 @@
+name: 'AutoDoc Architect'
+description: 'Generate professional architecture documentation and diagrams automatically for your Pull Requests.'
+author: 'Adrian Sanchez Simon'
+inputs:
+  gemini_api_key:
+    description: 'Your Gemini API Key from Google AI Studio.'
+    required: true
+  workspace:
+    description: 'Path to the root of the project.'
+    required: false
+    default: '.'
+  diff_target:
+    description: 'The target branch to compare against (e.g., origin/main).'
+    required: false
+    default: 'origin/main'
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Download AutoDoc CLI
+      shell: bash
+      run: |
+        # Aquí se descargaría el binario compilado de los releases en una verisón real.
+        # Por ahora, compilamos localmente para asegurar funcionalidad.
+        mvn clean package -DskipTests
+
+    - name: Run AutoDoc
+      shell: bash
+      env:
+        GEMINI_API_KEY: ${{ inputs.gemini_api_key }}
+      run: |
+        java -jar target/autodoc-cli-1.0-SNAPSHOT.jar \
+          --workspace ${{ inputs.workspace }} \
+          --diff ${{ inputs.diff_target }} \
+          --stdout --pr-comment > autodoc_report.txt
+
+    - name: Post Comment to PR
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        filePath: autodoc_report.txt
+        comment_tag: autodoc-report
