@@ -1,0 +1,40 @@
+name: AutoDoc CLI CI
+
+on:
+  pull_request:
+    paths:
+      - '**.java'
+
+jobs:
+  build-and-document:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          components: 'native-image'
+
+      - name: Build Native Image with SBOM
+        run: |
+          # Construimos el CLI nativo (el POM necesita configurarse para esto)
+          mvn -Pnative package -DskipTests
+
+      - name: Run AutoDoc CLI
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          ./target/autodoc-cli generate --workspace . --diff origin/main
+
+      - name: Commit Auto-Generated Docs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs(autodoc): He actualizado la documentación de arquitectura basado en el PR"
+          file_pattern: "docs/*.md"
