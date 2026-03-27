@@ -17,16 +17,22 @@ public class LLMClient {
     private final ObjectMapper mapper;
     private final String baseUrl;
     private final boolean isLocal;
+    private final boolean isOllama;
+    private final String modelName;
 
-    public LLMClient(boolean isLocal) {
+    public LLMClient(boolean isLocal, boolean isOllama, String modelName) {
         this.isLocal = isLocal;
+        this.isOllama = isOllama;
+        this.modelName = modelName;
         this.httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
         this.mapper = new ObjectMapper();
 
-        if (isLocal) {
+        if (isOllama) {
+            this.baseUrl = "http://127.0.0.1:11434/api/chat";
+        } else if (isLocal) {
             this.baseUrl = "http://127.0.0.1:18789/v1/chat/completions";
         } else {
             String apiKey = System.getenv("GEMINI_API_KEY");
@@ -52,8 +58,8 @@ public class LLMClient {
                               "- NO inventes implementaciones internas de métodos que han sido podados.\n" +
                               "- Limítate a lo que ves en las firmas y nombres de dependencias.";
 
-        if (isLocal) {
-            // Payload OpenClaw (OpenAI compat)
+        if (isLocal || isOllama) {
+            // Payload compatible con OpenAI / Ollama Chat API
             ArrayNode messages = requestBody.putArray("messages");
             ObjectNode systemMsg = mapper.createObjectNode();
             systemMsg.put("role", "system");
@@ -65,7 +71,10 @@ public class LLMClient {
             userMsg.put("content", "Estructura del código (AST Podado):\n" + prunedCodeBlocks);
             messages.add(userMsg);
             
-            requestBody.put("model", "gemini-1.5-flash");
+            requestBody.put("model", isOllama ? modelName : "gemini-1.5-flash");
+            if (isOllama) {
+                requestBody.put("stream", false);
+            }
         } else {
             // Payload Nativo Google Gemini
             ObjectNode sysInstruction = requestBody.putObject("system_instruction");
@@ -94,15 +103,17 @@ public class LLMClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             JsonNode jsonNode = mapper.readTree(response.body());
             
-            if (isLocal) {
+            if (isOllama) {
+                return jsonNode.get("message").get("content").asText();
+            } else if (isLocal) {
                 return jsonNode.get("choices").get(0).get("message").get("content").asText();
             } else {
                 return jsonNode.get("candidates").get(0).get("content").get("parts").get(0).get("text").asText();
             }
         } catch (Exception e) {
             System.err.println("⚠️ Conexión al LLM rechazada o fallida: " + e.getMessage());
-            if (isLocal) {
-                System.out.println("🤖 Detectado modo --local. Generando Documento MOCK de Inteligencia Artificial para demostración...");
+            if (isLocal || isOllama) {
+                System.out.println("🤖 Detectado modo local/privacidad. Generando Documento MOCK para demostración...");
                 return "## Análisis de Arquitectura\n\nSe detectan dependencias y entidades nuevas durante el refactor o *Sprint* de la clase `PaymentProcessor`.\n\n### Diagrama de Secuencia\n\n```mermaid\nsequenceDiagram\n    participant Cliente\n    participant PaymentProcessor\n    Cliente->>PaymentProcessor: processCreditCard(pan, exp, cvv, amount)\n    PaymentProcessor-->>Cliente: boolean result\n    Cliente->>PaymentProcessor: refundTransaction(transactionId)\n```\n\n### Observaciones de Diseño\nSe ha introducido acoplamiento fuerte en la validación en duro del PAN (`IllegalArgumentException: Invalid PAN`). Sería recomendable extraer estas reglas a una clase `PaymentValidator` en futuras iteraciones.";
             }
             throw new Exception("Error fatal de IA", e);

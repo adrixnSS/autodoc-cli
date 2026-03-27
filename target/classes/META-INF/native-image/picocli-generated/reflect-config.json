@@ -8,8 +8,10 @@
     "fields" : [
       { "name" : "diffTarget" },
       { "name" : "isLocal" },
+      { "name" : "isOllama" },
       { "name" : "isPRComment" },
       { "name" : "isStdout" },
+      { "name" : "modelName" },
       { "name" : "workspace" }
     ]
   },

@@ -31,6 +31,12 @@ public class AutoDocCLI implements Callable<Integer> {
     @Option(names = {"--pr-comment"}, description = "Formatear salida específicamente para comentarios de Pull Request.", defaultValue = "false")
     private boolean isPRComment;
 
+    @Option(names = {"--ollama"}, description = "Enrutar hacia instancia local de Ollama para Privacidad Total.", defaultValue = "false")
+    private boolean isOllama;
+
+    @Option(names = {"-m", "--model"}, description = "Nombre del modelo local (ej: llama3, codellama).", defaultValue = "llama3")
+    private String modelName;
+
     @Override
     public Integer call() throws Exception {
         System.out.println("🚀 Iniciando AutoDoc CLI...");
@@ -65,12 +71,12 @@ public class AutoDocCLI implements Callable<Integer> {
             }
         }
         
-        System.out.println("🧠 Enviando Código con Referencia Cruzada al LLM (Local=" + isLocal + ")...");
+        System.out.println("🧠 Enviando Código con Referencia Cruzada al LLM...");
         System.out.println("\n--- [INICIO CÓDIGO PODADO] ---");
         System.out.println(prunedCodeBuilder.toString());
         System.out.println("--- [FIN CÓDIGO PODADO] ---\n");
 
-        LLMClient llmClient = new LLMClient(isLocal);
+        LLMClient llmClient = new LLMClient(isLocal, isOllama, modelName);
         
         try {
             // Unimos el código podado con el contexto de las clases relacionadas encontradas
