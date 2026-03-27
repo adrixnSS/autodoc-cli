@@ -1,0 +1,7 @@
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\cli\AutoDocCLI.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\ASTParserService.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\DocWriter.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\GitService.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\LLMClient.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\core\visitors\MethodBodyPruner.java
+C:\Users\adria\Proyectos\autodoc-cli\src\main\java\com\autodoc\test\PaymentProcessor.java
